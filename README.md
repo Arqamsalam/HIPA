@@ -35,6 +35,11 @@ other unique numbers. Facilities, schools and employers are replaced too.
 - 🎭 **Realistic fakes or tags.** `John Smith → Theo Dalgleish`, or `John Smith → [NAME-1]`.
 - 🔁 **Consistent.** `John Smith`, `Mr. Smith`, `J. Smith`, `SMITH, JOHN` all become the same fake person. Fake first names keep the original sex.
 - 📅 **Smart date shifting.** One random shift per document, in whole weeks, so intervals *and* weekdays stay correct.
+- 🧭 **Understands real-world layouts.** For example:
+  - the classic opening line `<Name> is a 72-year-old male admitted <date> to <Hospital> <Unit> for …`, even for names it has never seen
+  - `Name of Patient`, `Father's Name`, `S/O`, `D/O`, `W/O`, `B/O`
+  - table and tab layouts, lowercase names, and titles like `Mst.` / `Smt.` / `Prof. Dr.`
+  - about 2,000 names from South Asian, Middle Eastern, African, East Asian, Hispanic, and European traditions
 - 🩺 **Medical allow-list.** *Parkinson's disease*, *Foley catheter*, *Babinski sign*, *Stevens-Johnson syndrome*… are never mistaken for people.
 - 🚦 **Human review screen.** Green = replaced, yellow = replaced but please check, orange = consider (e.g. "former mayor", "Christmas Eve"). Click to restore. Select text to redact.
 - ✍️ **Custom lists.** "Always replace" (pet names, small businesses: `Biscuit = Max`) and "Never replace" (false alarms).
@@ -51,7 +56,7 @@ No install and no dependencies. Either:
 - serve the folder: `python3 -m http.server` → open http://localhost:8000
 
 ```bash
-npm test          # 19 tests: no-leak checks on synthetic notes + edge cases
+npm test          # 24 tests: no-leak checks on synthetic notes, 30 real-world layouts, edge cases
 npm run build     # regenerates src/ui/samples.js and dist/hipa-offline.html
 ```
 

@@ -26,6 +26,30 @@
     Calvin Clarence Earl Ernest Francis Fred Herbert Jimmy Johnny Leonard Lloyd Martin Melvin Norman
     Phillip Stanley Victor Vernon Wesley Allen Neil Troy Cody Corey Evan Ian Isaac Caleb Connor Hunter
     Owen Wyatt Luke Max Leo Ezra Julian Hudson Grayson Levi Sebastian Mateo Santiago Angel
+
+    Abbas Abid Adeel Adil Adnan Afzal Ahsan Akbar Akhtar Akram Altaf Amjad Amir Anwar Arif Arshad Asad
+    Asghar Ashfaq Ashraf Asif Aslam Atif Ayaz Azhar Babar Basit Danish Ehsan Fahad Fahim Farhan Farooq
+    Fawad Ghulam Habib Hafeez Haider Hamid Haroon Hasan Hashim Ijaz Ikram Ilyas Inam Iqbal Irfan Ishaq
+    Jamal Jamil Jawad Junaid Kamal Kamran Karim Kashif Khurram Majid Mansoor Masood Mehmood Mahmood Mohsin
+    Mubashir Mudassar Mujahid Munir Murtaza Mushtaq Nadeem Naeem Najeeb Nasir Naveed Nawaz Nisar Noman
+    Obaid Qaiser Qasim Rafiq Rashid Rauf Rehman Riaz Rizwan Saad Sabir Sadiq Saeed Sajid Sajjad Salman
+    Saqib Sarfraz Shafiq Shahbaz Shahid Shahzad Shakeel Sharif Shehzad Shoaib Sohail Suleman Sultan
+    Tahir Talha Tanveer Tauseef Usama Waheed Waqar Waqas Waseem Yasir Younas Yousaf Zafar Zahid Zaheer
+    Zeeshan Zubair Zulfiqar Khalil Jabbar Sattar Ghaffar Qayyum Rasool Hameed Majeed Aziz Latif
+    Aarav Aditya Akash Ajay Arun Ashok Deepak Ganesh Gopal Harish Karan Krishna Manoj Mohan Mukesh Naresh
+    Nitin Pradeep Prakash Pranav Rakesh Ramesh Rohit Sachin Sandeep Santosh Satish Shankar Shiv Siddharth
+    Sunil Tarun Varun Vijay Vinod Vivek Yogesh Gurpreet Harpreet Jaswinder Manpreet Rahim Karim Shafiqul
+    Kwame Kwabena Kofi Kojo Yaw Kwaku Kwesi Ama Chukwuemeka Chidi Obinna Ikenna Nnamdi Uche Emeka
+    Oluwaseun Olumide Ayodele Babatunde Femi Segun Tunde Adewale Abiodun Ibrahima Mamadou Moussa Ousmane
+    Cheikh Abdoulaye Tesfaye Haile Dawit Getachew Mulugeta Abebe Tendai Tafadzwa Sipho Thabo Themba
+    Mandla Juma Baraka Otieno Odhiambo Kiprono Wanjiru Kimani Mwangi
+    Hiroshi Takashi Kazuki Haruto Sota Jun Jin Min Joon Seung Hyun Dong Sung Tae Young Minh Duc Tuan Hung
+    Thanh Quang Long Phuc Bao Huy Somchai Arif Budi Agus Eko Joko Rizal Jose Ramon Rodrigo Andres
+    Alberto Arturo Cesar Enrique Ernesto Gerardo Guillermo Hector Ignacio Jaime Joaquin Julio Marco Mario
+    Mauricio Nicolas Octavio Pablo Raul Ruben Salvador Tomas Vicente Aleksandr Andrei Mikhail Nikolai
+    Pavel Yuri Oleg Igor Boris Viktor Piotr Tomasz Krzysztof Pawel Marek Jan Lukas Matteo Giuseppe
+    Giovanni Francesco Luca Hans Klaus Jurgen Stefan Pierre Jean-Pierre Jacques Francois Mehmet Mustafa
+    Emre Murat Burak Kemal Ozan Reza Hossein Mehdi Ali-Reza Farid Karim Nabil Samir Walid Ziad Rami
   `);
   const FEMALE_FIRST = lowerSet(`
     Mary Patricia Jennifer Linda Elizabeth Barbara Susan Jessica Sarah Karen Lisa Nancy Betty Sandra
@@ -44,6 +68,26 @@
     Sheila Tammy Tina Yvonne Erin Molly Holly Leah Kristen Kristin Allison Courtney Brooke Haley
     Morgan Taylor Kaitlyn Jasmine Destiny Savannah Paige Audrey Claire Stella Violet Penelope Nora
     Eleanor Hope Faith Joy June April May Dawn Iris Ruby Pearl Jade
+
+    Afshan Aliya Alishba Amna Anam Aneela Anum Areeba Arooj Asma Asia Ayesha Azra Bano Bushra Farah
+    Farzana Fouzia Ghazala Hafsa Hajra Huma Iqra Iram Javeria Kanwal Kausar Kousar Kiran Kulsoom Lubna
+    Mahnoor Maheen Mehwish Misbah Mumtaz Munazza Nabila Nadia Naheed Najma Naila Nasreen Nazia Nighat
+    Nimra Nusrat Parveen Perveen Rabia Rafia Rehana Riffat Robina Rubina Rukhsana Saba Sadia Saima Saira
+    Sajida Salma Samina Samra Sana Sehrish Shabana Shagufta Shaheen Shahida Shamim Shazia Shaista
+    Sidra Sobia Sumaira Sumbal Tahira Tanzeela Uzma Yasmeen Zahida Zakia Zarghuna Zarina Zeba Zubaida
+    Zunaira Mehreen Fiza Hira Ifra Maira Rimsha Tayyaba
+    Aishwarya Ananya Aarti Bhavna Divya Gauri Geeta Gita Kavita Kavya Komal Lata Madhu Meena Meera Nandini
+    Nisha Pallavi Poonam Pushpa Radha Rekha Ritu Sangeeta Sarita Savita Seema Shalini Shanti Shilpa
+    Shweta Sneha Sonia Usha Vandana Lakshmi Devi Parvati Kamala Saraswati Jaspreet Simran Gurleen
+    Abena Akosua Adwoa Efua Esi Yaa Afua Ngozi Nneka Chiamaka Chinwe Ifeoma Amaka Funmilayo Folasade
+    Yetunde Bukola Titilayo Aminata Fatou Mariama Awa Aissatou Tigist Selam Meron Hirut Almaz Nomsa
+    Thandiwe Zanele Lindiwe Wambui Achieng Akinyi Nyambura
+    Yuko Haruka Aiko Emi Hana Mai Jiyeon Soo Eun Hye Ji Mina Thi Lan Hoa Huong Linh Ngoc Trang Thao Mai
+    Siti Nurul Dewi Putri Ayu Wulan Leticia Beatriz Consuelo Dolores Esperanza Graciela Josefina Juana
+    Luz Marisol Mercedes Pilar Raquel Rocio Soledad Ximena Xochitl Yolanda Ludmila Anastasia Ekaterina
+    Galina Larisa Nadezhda Oksana Agnieszka Katarzyna Malgorzata Magdalena Giulia Francesca Chiara
+    Giovanna Marie-Claire Genevieve Brigitte Ingrid Greta Zeynep Elif Ayse Fatma Emine Leyla Shirin
+    Maryam Zahra Parisa Nasrin Rania Dina Huda Lina Reem Samira Nour Hiba Mona
   `);
   const NEUTRAL_FIRST = lowerSet(`Alex Casey Riley Jamie Avery Quinn Cameron Drew Skyler Robin Jordan Taylor Morgan`);
   // First names that are also everyday words or places; only trusted with strong context.
@@ -54,6 +98,8 @@
     Virginia Austin Dallas Houston Florence Paris Sydney Angel Harper Taylor Morgan Paige Brooke
     Holly Joe Young Kelly Robin Leo Owen Luke Grayson Hudson Stella Claire Nora Sara Paula Erin
     Ali Max Ann Anne Mary Ivan Hazel Vera Joan Joyce Lucy Ella Mia Ava Zoe Noah Ian Neil Troy Earl
+    Long Young Min Jun Jin Sun Song Hung Hong Bao Mai Hana Luz Dina Mona Ma He Do Ho Ba Han Lin Li Le Jang Sen Dar Mir Ray Rose
+    Asia Devi Bibi Begum Lata Gita Ji Soo Eun Dong Sung Tae Thi Lan Ayu Duc Huy Marco Hiba Reem Nour Sana Rana Saba Huma Hira Iqra Emi
   `);
 
   const SURNAMES = lowerSet(`
@@ -100,6 +146,30 @@
     Okafor Okonkwo Adeyemi Mensah Abubakar Nwosu Mohammed Abdullah Haddad Khoury Nasser Farah
     Ellison Cohen Levy Friedman Katz Goldberg Rosen Shapiro Kaplan Weiss Stein Schwartz Becker
     Russo Romano Ricci Esposito Bianchi Rossi Costa Ferrari Murray Doherty Kelleher O'Neill Byrne
+
+    Abbasi Akhtar Alvi Ansari Arain Ashraf Awan Aziz Baig Bajwa Bhatti Bukhari Butt Chaudhry Chaudhary
+    Cheema Dar Durrani Farooqi Gilani Gondal Haider Hashmi Hussain Hussaini Iqbal Jadoon Jamali Janjua
+    Javed Jatoi Kakar Kazmi Khattak Khokhar Kiyani Kayani Lodhi Mahmood Mehmood Malik Memon Minhas Mir
+    Mughal Naqvi Niazi Paracha Qazi Qureshi Rajput Rana Rao Rizvi Saleem Shaikh Shaheen Sheikh Siddiqui
+    Soomro Sultan Swati Syed Tareen Tiwana Usmani Warraich Yousafzai Zaidi Zaman Bibi Begum Khatoon
+    Ullah Ul-Haq Rasool Hameed Majeed Akram Arif Aslam Nawaz Rehman Rahman Rauf Shah Abbas
+    Agarwal Ahuja Bhat Bhatt Chatterjee Chopra Dutta Ghosh Goswami Iyengar Jain Kaur Khanna Krishnan
+    Kulkarni Menon Mishra Mukherjee Naidu Pandey Pillai Prasad Saxena Sen Shetty Sinha Srinivasan
+    Subramanian Thakur Tiwari Trivedi Venkataraman Yadav Gill Sandhu Sidhu Dhillon Grewal
+    Asante Mensah Owusu Boateng Osei Appiah Agyeman Darko Addo Adjei Amoah Acheampong Adebayo Adeyemi
+    Afolabi Okafor Okeke Okonkwo Okoro Nwachukwu Eze Obi Chukwu Ogunleye Ogunbiyi Balogun Bello Danjuma
+    Diallo Diop Ndiaye Sow Ba Traore Keita Toure Camara Kone Kamara Bekele Tadesse Tesfaye Girma Mekonnen
+    Moyo Ncube Dlamini Nkosi Ndlovu Khumalo Mokoena Otieno Kamau Mwangi Wanjiku Kariuki Omondi
+    Tran Pham Hoang Huynh Phan Vu Vo Dang Bui Do Ho Ngo Duong Ly Park Choi Jung Kang Cho Yoon Jang Lim
+    Han Shin Seo Kwon Hwang Ahn Song Hong Chen Zhao Zhou Xu Sun Ma Zhu Hu Guo He Gao Luo Zheng Liang Xie
+    Tang Feng Deng Cao Peng Takahashi Yamada Sasaki Yamaguchi Matsumoto Inoue Kimura Hayashi Shimizu
+    Santos Pereira Oliveira Souza Lima Carvalho Ferreira Alves Ribeiro Gomes Martins Rocha Almeida
+    Volkov Sokolov Popov Lebedev Kozlov Novikov Morozov Petrova Ivanova Kuznetsov Nowak Wisniewski
+    Wojcik Kaminski Lewandowski Zielinski Muller Schulz Hoffmann Koch Richter Klein Wolf Neumann
+    Dubois Durand Lefebvre Moreau Laurent Simon Michel Leroy Roux Fournier Girard Bonnet Dupont
+    Yilmaz Kaya Demir Sahin Celik Yildiz Ozturk Aydin Arslan Dogan Hosseini Mohammadi Rezaei Ahmadi
+    Karimi Moradi Jafari Rahimi Sadeghi Hashemi Haddad Khoury Saleh Mansour Hamdan Darwish Najjar
+    Tlapaltotoli Mendoza Fernandez Ruiz Guerrero Herrera Vargas Castillo Navarro Iglesias Vega
   `);
 
   // ---- Medical eponyms: capitalised words that look like names but are medical terms ----

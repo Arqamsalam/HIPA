@@ -46,6 +46,7 @@
       this.initialMap = new Map();     // 'J' -> 'M'
       this.roleHint = new Map();       // lower name word -> 'first' | 'last'
       this.entityOf = new Map();       // lower name word -> entity number (for tags)
+      this.sexHint = new Map();        // lower name word -> 'm' | 'f' (from "is a 72-year-old male")
       this.entityCount = 0;
       this.tagCounters = {};
       this.used = new Set();
@@ -81,6 +82,11 @@
 
     // Look at full names first, so lone words later know if they're a first or last name.
     prepare(spans) {
+      for (const s of spans) {
+        if (s.type === 'NAME' && s.meta.sex) {
+          for (const w of this.nameWords(s.text)) if (!w.isInit) this.sexHint.set(lower(w.base), s.meta.sex);
+        }
+      }
       for (const s of spans) {
         if (s.type !== 'NAME') continue;
         const words = this.nameWords(s.text);
@@ -146,9 +152,10 @@
       if (role === 'last') {
         fake = this.pickUnique(D.FAKE.last, 'last|' + k);
       } else {
+        const hint = this.sexHint.get(k);
         const list = D.MALE_FIRST.has(k) && !D.FEMALE_FIRST.has(k) ? D.FAKE.male
           : D.FEMALE_FIRST.has(k) && !D.MALE_FIRST.has(k) ? D.FAKE.female
-            : D.FAKE.neutral;
+            : hint === 'm' ? D.FAKE.male : hint === 'f' ? D.FAKE.female : D.FAKE.neutral;
         fake = this.pickUnique(list, 'first|' + k);
         const init = base.charAt(0).toUpperCase();
         if (!this.initialMap.has(init)) this.initialMap.set(init, fake.charAt(0).toUpperCase());

@@ -47,15 +47,31 @@
    * "Smith, John", "SMITH, JOHN A". Stops at the first word that isn't a plausible name.
    */
   const tokRe = new RegExp(`${TOK}|[A-Z]\\.(?=[ \\t]*[A-Z])|[A-Z](?=[ \\t]+[A-Z][a-z])`, 'y');
+  // Lower-case names ("name: john smith") are only accepted right after a "Name" label.
+  const lowerTokRe = /[a-z][a-z'’]*(?:-[a-z][a-z'’]*)*/y;
+  // Courtesy titles that may sit between a label and the name: "Name: Mst. Nasreen", "Prof. Dr. Shahid"
+  const HONORIFIC_RE = /(?:Mr|Mrs|Ms|Miss|Mx|Mst|Mstr|Master|Smt|Shri|Sri|Kumari|Km|Dr|Prof|Professor|Doctor|Rev|Sr|Sra|Srta|Mme|Mlle|Herr|Frau)\b\.?[ \t]+/iy;
   function readNameAt(text, pos, opts) {
     opts = opts || {};
     let i = pos;
     while (text[i] === ' ' || text[i] === '\t') i++;
+    if (opts.skipTitles) {
+      for (let k = 0; k < 3; k++) {
+        HONORIFIC_RE.lastIndex = i;
+        const h = HONORIFIC_RE.exec(text);
+        if (!h) break;
+        i += h[0].length;
+      }
+    }
     const toks = [];
     let comma = false;
     while (toks.length < 4) {
       tokRe.lastIndex = i;
-      const m = tokRe.exec(text);
+      let m = tokRe.exec(text);
+      if (!m && opts.allowLower) {
+        lowerTokRe.lastIndex = i;
+        m = lowerTokRe.exec(text);
+      }
       if (!m) break;
       const t = m[0];
       const isInit = /^[A-Z]\.?$/.test(t);
@@ -317,9 +333,12 @@
     FACILITY_RE.lastIndex = 0;
     while ((m = FACILITY_RE.exec(text))) {
       const words = m[1].trim().split(/[ \t]+/);
-      while (words.length && D.STOPWORDS.has(lower(words[0].replace(/[.'’]/g, ''))) && !/^(St\.?|Saint|Mount|Mt\.?)$/.test(words[0])) words.shift();
+      while (words.length && /^(?:the|a|an|at|to|in|from|our|this|that|local|outside|nearby|another|same|previous|prior|other|her|his|their)$/i.test(words[0])) words.shift();
+      if (!words.length) continue;
       const proper = words.filter((w) => !D.STOPWORDS.has(lower(w.replace(/[.'’]/g, ''))));
-      if (!proper.length) continue;
+      // "General Hospital" alone is generic; "Services Hospital", "Lady Reading Hospital" are names
+      if (!proper.length && words.length < 1) continue;
+      if (!proper.length && words.every((w) => /^(?:General|Community|Regional|District|County|City|State|University|Medical|Teaching|Local|Main|Public|Private|Mental|Behavioral|Psychiatric|Children'?s|Women'?s|Memorial|Rehab|Rehabilitation|Nursing|Home|Health|Care|Primary|Urgent|Specialty|Outside|Previous)$/i.test(w))) continue;
       const s = m.index + m[0].indexOf(words[0]);
       out.push(span(s, m.index + m[0].length, 'FACILITY', 'high', { suffix: m[2] }));
     }
@@ -372,6 +391,19 @@
   ];
   const LABEL_RE = new RegExp(`(?<![A-Za-z])(?:(${COLON_LABELS.join('|')})[ \\t]*(?:[:]|-(?=[ \\t]))|(${CLINICIAN_LABELS.join('|')})[ \\t]*(?:[:]|-(?=[ \\t]))|(${BY_LABELS.join('|')})(?![A-Za-z])[ \\t]*:?)[ \\t]*`, 'gi');
 
+  // Labels that can only be followed by a person's name. Because they are so specific, they may use
+  // any separator (colon, dash, "=", a tab, or a wide gap in a table) and the name may be lower case.
+  const REL = "Father|Mother|Husband|Wife|Spouse|Guardian|Son|Daughter|Parent|Brother|Sister|Attendant|Caregiver|Kin|Next of Kin|Emergency Contact|Contact|Informant|Guarantor|Insured|Subscriber|Member|Client|Resident|Patient|Pt\\.?|Mother'?s Maiden|Doctor'?s|Physician'?s|Consultant'?s|Referring Doctor'?s";
+  const NAME_LABEL_RE = new RegExp(
+    `(?<![A-Za-z])(?:(?:${REL})(?:['’]s)?[ \\t]+(?:Full[ \\t]+)?Name|Name[ \\t]+of[ \\t]+(?:the[ \\t]+)?(?:Patient|Pt\\.?|${REL})|(?:Full|Legal|First|Last|Given|Family|Middle|Maiden|Preferred|Patient|Pt\\.?)[ \\t]+Name|Name|Surname|Forename|Given Names?|Nombre|Nom|Naam|Ism|Referred[ \\t]+by|Ref\\.?[ \\t]+by|Under[ \\t]+(?:the[ \\t]+)?care[ \\t]+of|Admitted[ \\t]+under|Consultant)` +
+    `(?:[ \\t]*\\([^)\\n]{0,20}\\))?(?:[ \\t]*[:=\\-–—>|][ \\t]*|\\t[ \\t]*|[ ]{2,})`, 'gi');
+  const CLINICIAN_NAME_LABEL = /^(?:Doctor|Physician|Consultant|Referring|Referred|Ref|Under|Admitted)/i;
+
+  // "S/O Abdul Qayyum" (son of), "D/O", "W/O" (wife of), "B/O" (baby of). H/O and C/O are clinical shorthand, not relations.
+  const KIN_OF_RE = /(?<![A-Za-z])(?:S\/O|D\/O|W\/O|B\/O|F\/O|M\/O|Son of|Daughter of|Wife of|Husband of|Baby of|Mother of|Father of|Child of|Widow of)\b\.?[ \t:]*(?=[A-Za-z])/gi;
+  // "Patient Bilal Hussain, ..." (no colon). Needs two name words so "Patient Denies" can't match.
+  const PATIENT_PREFIX_RE = /(?<![A-Za-z])(?:the )?(?:patient|pt\.?|client|resident)[ \t]+(?=[A-Z])/gi;
+
   const REL_WORDS = 'wife|husband|spouse|son|daughter|mother|father|mom|dad|sister|brother|partner|fianc[ée]e?|boyfriend|girlfriend|grandson|granddaughter|grandmother|grandfather|grandma|grandpa|niece|nephew|aunt|uncle|cousin|friend|neighbor|neighbour|roommate|caregiver|guardian|stepson|stepdaughter|stepmother|stepfather|sibling|child|baby';
   const REL_RE = new RegExp(`\\b(?:${REL_WORDS})(?:,|[ \\t]+(?:is|was|named|called))?[ \\t]+(?=[A-Z])`, 'gi');
   const NAMED_RE = /\b(?:named|called|goes by|name is|known as|nicknamed)[ \t]+(?=[A-Z])/gi;
@@ -387,9 +419,33 @@
     LABEL_RE.lastIndex = 0;
     while ((m = LABEL_RE.exec(text))) {
       const clinician = !!(m[2] || (m[3] && !/accompanied/i.test(m[3])));
-      const nm = readNameAt(text, m.index + m[0].length, { allowSingle: true, strong: true, allowLeadingInitial: true });
-      if (nm) pushName(out, nm, 'high', { clinician, source: 'label' });
+      const nm = readNameAt(text, m.index + m[0].length, { allowSingle: true, strong: true, allowLeadingInitial: true, skipTitles: true });
+      if (nm) { pushName(out, nm, 'high', { clinician, source: 'label' }); continue; }
+      // "Patient: smith, john" — lower-case "last, first" right after a patient label
+      if (m[1] && /^(?:patient|pt)/i.test(m[1])) {
+        const lc = /^([a-z][a-z'’-]+),[ \t]*([a-z][a-z'’-]+)\b/.exec(text.slice(m.index + m[0].length));
+        if (lc && !D.STOPWORDS.has(lc[1]) && !D.STOPWORDS.has(lc[2])) {
+          const st = m.index + m[0].length;
+          out.push(span(st, st + lc[0].length, 'NAME', 'high', { comma: true, source: 'label' }));
+        }
+      }
     }
+    NAME_LABEL_RE.lastIndex = 0;
+    while ((m = NAME_LABEL_RE.exec(text))) {
+      const nm = readNameAt(text, m.index + m[0].length, { allowSingle: true, strong: true, allowLeadingInitial: true, skipTitles: true, allowLower: true });
+      if (nm) pushName(out, nm, 'high', { clinician: CLINICIAN_NAME_LABEL.test(m[0]), source: 'label' });
+    }
+    KIN_OF_RE.lastIndex = 0;
+    while ((m = KIN_OF_RE.exec(text))) {
+      const nm = readNameAt(text, m.index + m[0].length, { allowSingle: true, strong: true, noComma: true, skipTitles: true, allowLower: /^[a-z]/.test(text.charAt(m.index + m[0].length)) && /^[a-z]/.test(m[0]) });
+      if (nm) pushName(out, nm, 'high', { source: 'relation' });
+    }
+    PATIENT_PREFIX_RE.lastIndex = 0;
+    while ((m = PATIENT_PREFIX_RE.exec(text))) {
+      const nm = readNameAt(text, m.index + m[0].length, { allowSingle: false, noComma: true, skipTitles: true });
+      if (nm) pushName(out, nm, nm.toks.some((t) => knownName(t.t)) ? 'high' : 'medium', { source: 'label' });
+    }
+    detectNamesBeforeDemographics(text, out);
     TITLE_RE.lastIndex = 0;
     while ((m = TITLE_RE.exec(text))) {
       const nm = readNameAt(text, m.index + m[0].length, { allowSingle: true, strong: true, noComma: true, allowLeadingInitial: true });
@@ -423,6 +479,123 @@
       }
     }
     detectDictionaryNames(text, out);
+  }
+
+  function knownName(tok) {
+    const k = lower(stripPossessive(tok));
+    return D.isFirstName(k) || D.SURNAMES.has(k);
+  }
+
+  /*
+   * Names we've never seen before, recognised by what follows them. In clinical notes a person's
+   * name is very often followed straight away by age and sex:
+   *   "Kwabena Asante is a 61-year-old man"   "Hamid Ullah 40 M"   "Oluwadamilare Adebayo, 33F"
+   *   "Shabana Kousar\n35 years, female"      "Ghulam Rasool (45/M)"
+   */
+  const SEX = '(?:M|F|m|f|male|female|man|woman|boy|girl|gentleman|lady|MALE|FEMALE|Male|Female)';
+  const DEMOGRAPHIC_AFTER = new RegExp(
+    '^[ \\t]*(?:,|\\(|\\n)?[ \\t]*(?:\\n[ \\t]*)?(?:(?:is|was)[ \\t]+(?:an?|the)[ \\t]+|aged?[ \\t:]*)?' +
+    `\\d{1,3}(?:[ \\t]*[-/]?[ \\t]*(?:years?|yrs?|y\\.?o\\.?|y\\/o|yo|Y)(?:[ \\t-]*old)?)?[ \\t]*(?:[,/]|\\bold\\b)?[ \\t]*${SEX}\\b`
+  );
+  /*
+   * The classic opening line of a clinical note:
+   *   "<Name> is a 72-year-old male admitted on <date> to <Hospital> <Unit> for altered mental status."
+   * Whatever words come before "is a NN-year-old <sex>" at the start of a sentence are the person's
+   * name — even if we've never seen the name, it's one word, or it's typed in lower case.
+   */
+  const OPENING_RE = new RegExp(
+    `(^|[\\n\\r]|[.!?:;][ \\t]+)[ \\t]*((?:[A-Za-z][A-Za-z'’.-]*[ \\t]+){1,6}?)(?:is|was|,)[ \\t]+(?:an?[ \\t]+)?\\d{1,3}[ \\t]*[-‐ ]?[ \\t]*(?:years?|yrs?|y\\.?o\\.?|y\\/o|yo)(?:[ \\t-]*old)?[ \\t,-]*${SEX}\\b`, 'g');
+  const OPENING_SKIP = /^(?:the|this|our|a|an|patient|pt\.?|client|resident|he|she|they|who|which|mr|mrs|ms|miss|mst|smt|dr|baby|master)$/i;
+  function detectOpeningLine(text, out) {
+    let m;
+    OPENING_RE.lastIndex = 0;
+    while ((m = OPENING_RE.exec(text))) {
+      const words = m[2].trim().split(/[ \t]+/);
+      let start = m.index + m[1].length + m[0].slice(m[1].length).indexOf(words[0]);
+      // drop leading "The patient", "Mr." ...
+      while (words.length && OPENING_SKIP.test(words[0].replace(/\.$/, ''))) {
+        const w = words.shift();
+        start = text.indexOf(words[0] || '', start + w.length);
+      }
+      if (!words.length || words.length > 4) continue;
+      if (words.some((w) => D.STOPWORDS.has(lower(w.replace(/[.'’]+$/, ''))) && !knownName(w))) continue;
+      const nameText = words.join(' ');
+      const realStart = text.indexOf(words[0], start);
+      const end = text.indexOf(words[words.length - 1], realStart) + words[words.length - 1].length;
+      if (realStart < 0 || end <= realStart || text.slice(realStart, end).replace(/\s+/g, ' ') !== nameText) continue;
+      const sexWord = lower(m[0].match(new RegExp(`${SEX}\\b$`))[0]);
+      const sex = /^(?:m|male|man|boy|gentleman)$/.test(sexWord) ? 'm' : 'f';
+      out.push(span(realStart, end, 'NAME', 'high', { source: 'opening', sex, single: words.length === 1 ? 'first' : undefined }));
+    }
+  }
+
+  /*
+   * "admitted on <date> to PIMS Medical Unit II", "admitted at Jinnah Hospital", "transferred from CMH Rawalpindi"
+   * The proper name of the hospital is replaced; generic unit words (Medical Unit, ICU, ward 3) are kept.
+   */
+  const ADMIT_RE = /\b(?:admitted|admission|transferred|referred|brought|presented|presents|seen|discharged|shifted|moved|evaluated|treated|managed|hospitali[sz]ed|followed)\b(?:[^\n.;]{0,40}?)\b(?:to|at|in|from|by)[ \t]+(?:the[ \t]+)?((?:[A-Z][A-Za-z'’&.-]*|\d+)(?:[ \t]+(?:[A-Z][A-Za-z'’&.-]*|of|and|&|\d+)){0,7})/g;
+  const FACILITY_WORD = /^(?:Hospital|Hospitals|Medical|Center|Centre|Clinic|Clinics|Institute|Complex|Teaching|General|Memorial|Infirmary|Health|Healthcare|Trust|Foundation|Sanatorium|Polyclinic|Dispensary|Maternity|Children'?s|Women'?s|University|College|Regional|District|County|Community|City|Civil|Military|Combined|Cantonment|Nursing|Home|Hospice|Rehabilitation|Rehab|Care|Services|Specialist|Specialty|Cancer|Heart|Cardiac|Kidney|Eye|Trauma|Surgical|Surgery)$/i;
+  const UNIT_WORD = /^(?:Unit|Ward|ICU|CCU|HDU|MICU|SICU|NICU|PICU|CICU|ER|ED|OPD|IPD|OT|OR|Department|Dept|Floor|Room|Bay|Bed|Wing|Block|Emergency|Casualty|Medicine|Medical|Surgery|Surgical|Cardiology|Neurology|Pulmonology|Nephrology|Oncology|Pediatrics|Paediatrics|Obstetrics|Gynecology|Gynaecology|Psychiatry|Orthopedics|Orthopaedics|Gastroenterology|Endocrinology|Hematology|Haematology|Urology|Dermatology|Rheumatology|Geriatrics|Internal|General|Intensive|Critical|Step-?down|Telemetry|Observation|Isolation|Labor|Labour|Delivery|Postpartum|Burn|Stroke|Trauma|Service|Team|Floor|I|II|III|IV|V|VI|VII|VIII|IX|X|\d+[A-Z]?|[A-Z]|and|&|of)$/i;
+  function detectAdmissionFacility(text, out) {
+    let m;
+    ADMIT_RE.lastIndex = 0;
+    while ((m = ADMIT_RE.exec(text))) {
+      const words = m[1].split(/[ \t]+/);
+      const start = m.index + m[0].length - m[1].length;
+      if (/^\d/.test(words[0])) continue;
+      if (D.STOPWORDS.has(lower(words[0])) && !FACILITY_WORD.test(words[0]) && !words.slice(1).some((w) => FACILITY_WORD.test(w))) continue;
+      // If a person (Dr. X) or a date follows "by/at", skip
+      if (/^(?:Dr|Mr|Mrs|Ms|Prof)\.?$/i.test(words[0])) continue;
+      if (D.isFirstName(lower(words[0])) && !FACILITY_WORD.test(words[1] || '')) continue;
+      // facility = up to and including the last facility word; or the leading proper words before a unit word
+      let lastFac = -1;
+      words.forEach((w, i) => { if (FACILITY_WORD.test(w) && !/^(?:Medical|General|Care|Services|Surgery|Surgical)$/i.test(w)) lastFac = i; });
+      let n;
+      if (lastFac >= 0) {
+        n = lastFac + 1;
+        // keep a trailing city name that is part of the hospital name, e.g. "CMH Rawalpindi" — handled by city detectors
+      } else {
+        n = 0;
+        while (n < words.length && !UNIT_WORD.test(words[n]) && !D.STOPWORDS.has(lower(words[n]))) n++;
+      }
+      if (n === 0) continue;
+      while (n > 0 && /^(?:of|and|&)$/i.test(words[n - 1])) n--;
+      const facWords = words.slice(0, n);
+      if (facWords.every((w) => D.STOPWORDS.has(lower(w)) || FACILITY_WORD.test(w)) && (lastFac < 0 || facWords.length < 2)) continue;
+      if (D.COUNTRIES.has(lower(facWords[0])) && facWords.length === 1) continue;
+      if (Object.values(D.STATES).some((s) => lower(s) === lower(facWords.join(' ')))) continue;
+      const facText = facWords.join(' ');
+      const end = text.indexOf(facWords[facWords.length - 1], start + facText.length - facWords[facWords.length - 1].length) + facWords[facWords.length - 1].length;
+      if (text.slice(start, end).replace(/[ \t]+/g, ' ') !== facText) continue;
+      const suffix = lastFac >= 0 ? words[lastFac] : 'Hospital';
+      out.push(span(start, end, 'FACILITY', 'high', { suffix: lastFac >= 0 ? suffix : 'Hospital', source: 'admission', bare: lastFac < 0 }));
+    }
+  }
+
+  function detectNamesBeforeDemographics(text, out) {
+    detectOpeningLine(text, out);
+    detectAdmissionFacility(text, out);
+    const startRe = new RegExp(TOK, 'g');
+    let m;
+    let skipUntil = 0;
+    while ((m = startRe.exec(text))) {
+      if (m.index < skipUntil) continue;
+      if (m.index > 0 && /[A-Za-z0-9'’-]/.test(text[m.index - 1])) continue;
+      const nm = readNameAt(text, m.index, { allowSingle: false, noComma: true });
+      if (!nm) continue;
+      // Try the longest run first, then shorter ones ("Seen Kwabena Asante, 61M" → drop words from the left)
+      for (let k = 0; k < nm.toks.length - 1; k++) {
+        const toks = nm.toks.slice(k);
+        if (toks.length < 2 || toks[0].isInit) continue;
+        if (!DEMOGRAPHIC_AFTER.test(text.slice(toks[toks.length - 1].end, toks[toks.length - 1].end + 60))) continue;
+        if (looksLikeEponym(text, toks[toks.length - 1].end)) continue;
+        const after = text.slice(toks[toks.length - 1].end, toks[toks.length - 1].end + 60).match(DEMOGRAPHIC_AFTER)[0];
+        const sex = /(?:\b|\d)(?:M|m|male|man|boy|gentleman|MALE|Male)\b/.test(after) && !/female|woman|FEMALE|Female/.test(after) ? 'm' : 'f';
+        out.push(span(toks[0].start, toks[toks.length - 1].end, 'NAME', 'high', { source: 'demographics', sex }));
+        skipUntil = nm.end;
+        break;
+      }
+    }
   }
 
   // Names found without context, using first-name and surname dictionaries.
