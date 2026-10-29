@@ -1,0 +1,30 @@
+DISCHARGE SUMMARY
+St. Vincent's Medical Center - Internal Medicine Service
+
+Patient: Garcia, Maria L.        MRN: MR-7731842       Acct #: 559102384
+Admission Date: January 3, 2024        Discharge Date: January 9, 2024
+PCP: Robert Chen, MD (Fax 713-555-0198)
+Patient lives at 4410 Westheimer Rd, Houston, Texas 77027. Cell 832.555.4471.
+
+HOSPITAL COURSE:
+Ms. Garcia is a 67 y/o female with SLE and CKD stage 3b admitted on 1/3 with fever,
+dysuria and right flank pain. Urine culture grew E. coli (pan-sensitive). Blood cultures
+negative. She was treated with ceftriaxone 1 g IV daily, transitioned to oral cefpodoxime
+on Jan 6. Creatinine peaked at 2.4 (baseline 1.6) and improved to 1.7 by discharge.
+Her daughter, Sofia Garcia, a nurse at Texas Children's Hospital, was at bedside and
+helped with medication teaching. Mrs. Garcia's lupus is followed by Dr. Okafor at the
+Baylor Rheumatology Clinic. Hydroxychloroquine 200 mg BID was continued.
+Note: no evidence of Wilson disease or Parkinson's disease; Babinski sign negative.
+History of Stevens-Johnson syndrome to sulfa in 2009.
+
+DISCHARGE LABS (01/09/2024):
+  Cr 1.7 mg/dL | eGFR 32 | K 4.6 | Hgb 10.4 | WBC 7.8 | CRP 1.2 mg/dL
+
+FOLLOW-UP:
+- Dr. Chen in 1 week (call 713-555-0198 x214)
+- Rheumatology with Dr. Okafor on 02/14/2024
+- Patient portal: https://mychart.example-hospital.org/patient/garcia-m
+Device: Medtronic insulin pump, Serial No. NG1234567H
+
+Dictated by: Robert Chen, MD
+Transcribed by: K. Johnson  01/09/2024

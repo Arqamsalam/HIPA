@@ -1,0 +1,9 @@
+Nursing progress note - Sunrise Gardens Assisted Living
+Resident: Eleanor Whitfield, 94-year-old female. DOB 05/22/1930. Room 212.
+Medicare ID: 1EG4-TE5-MK73
+Daughter Patricia Whitfield (Phone 503-555-0147) visited today. Resident was born in Portland
+and was a former mayor of the town. She reports mild left hip pain after a fall on Christmas Eve.
+X-ray of left hip on 12/26/2024: no fracture. Tylenol 650 mg PO q6h PRN.
+Mrs. Whitfield ambulates with walker. Vitals: BP 128/76, HR 72, SpO2 97%.
+Plan: PT evaluation, fall precautions. Notify Dr. Hernandez, NP if pain worsens.
+IP of fall-detection hub: 10.0.12.45

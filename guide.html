@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>How HIPA Works</title>
+  <meta name="description" content="A plain-language guide to HIPAA de-identification and how the HIPA tool cleans clinical text.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="src/ui/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/favicon.svg" alt="" width="28" height="28">
+      <div>
+        <h1>HIPA</h1>
+        <p class="tagline">How it works · a plain-language guide</p>
+      </div>
+    </div>
+    <nav class="toplinks">
+      <a href="index.html">← Back to the tool</a>
+      <a href="https://github.com/Arqamsalam/HIPA" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="guide">
+    <div class="card analogy">
+      <strong>The one-line idea:</strong> HIPA is a <em>witness protection program for medical records</em>.
+      The patient gets a new name, new address, and new ID numbers, but their <em>story</em> stays the same:
+      the diagnosis, labs, medications, and timeline. A student learns exactly the same medicine,
+      but nobody can trace it back to the real person.
+    </div>
+
+    <h2>1. Why the text never leaves your device</h2>
+    <p>If a cleaning tool sent your text to a server to be cleaned, you would be sending raw patient data across the
+      internet in order to protect it. That's like mailing your house key to a locksmith so they can tell you
+      whether your door is secure.</p>
+    <p>HIPA runs entirely inside your web browser. The page includes a security rule
+      (<code>Content-Security-Policy: connect-src 'none'</code>) that <strong>forbids the browser from sending
+      anything anywhere</strong>, even if someone changed the code. You can test it: load the page, turn off Wi-Fi,
+      and it keeps working. Patient text is never saved. Only your settings (like "tags vs. fakes") are remembered.</p>
+
+    <h2>2. What HIPAA counts as an identifier</h2>
+    <p>HIPAA's <strong>Safe Harbor</strong> method lists 18 kinds of identifiers. Remove all of them (and have no
+      reason to think the rest could still point to someone), and the text counts as de-identified. Think of it as a
+      checklist at airport security: every item on the list must be taken out of the bag.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Identifier</th><th>What HIPA does</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Names (patient, relatives, employers, household members)</td><td>Realistic fake name, same sex, same everywhere</td></tr>
+          <tr><td>2</td><td>Geography smaller than a state: street, city, county, ZIP</td><td>Fake street and city, <b>state kept</b>, ZIP cut to first 3 digits (or <code>000</code> for small areas)</td></tr>
+          <tr><td>3</td><td>All date parts except the year, and ages over 89</td><td>Dates shifted; ages 90+ become <code>90+</code></td></tr>
+          <tr><td>4–5</td><td>Phone and fax numbers</td><td>Fake numbers in the fictional 555-01xx range</td></tr>
+          <tr><td>6</td><td>Email addresses</td><td>Fake <code>@example.com</code> address</td></tr>
+          <tr><td>7</td><td>Social Security numbers</td><td>Fake number starting with 9 (never issued as a real SSN)</td></tr>
+          <tr><td>8–11</td><td>Medical record, health plan, account, certificate and license numbers</td><td>Random number in the same format</td></tr>
+          <tr><td>12–13</td><td>Vehicle IDs (VIN, plates) and device serial numbers</td><td>Random number in the same format</td></tr>
+          <tr><td>14–15</td><td>Web URLs and IP addresses</td><td>Replaced with reserved example addresses</td></tr>
+          <tr><td>16–17</td><td>Biometrics and full-face photos</td><td>Not applicable to text (labeled biometric IDs are replaced)</td></tr>
+          <tr><td>18</td><td>Any other unique number, code or characteristic</td><td>Unlabeled long numbers replaced; unusual details flagged for you</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Kept exactly as written:</strong> sex, diagnoses, symptoms, labs, vitals, medications and doses, procedures,
+      clinical reasoning, the state, the year, and ages 0–89.</p>
+
+    <h2>3. The two tricky rules</h2>
+    <h3>Age: kept, except for the oldest patients</h3>
+    <p>Very few people are 97 years old, so in a small town "a 97-year-old woman" can point to one person.
+      HIPAA therefore requires ages <strong>90 and above</strong> to be grouped together as <code>90+</code>.
+      Because a date of birth would reveal the same thing, HIPA also hides the DOB when the patient is 90 or older.</p>
+    <div class="example">94-year-old female. DOB 05/22/1930.
+→ 90+ year-old female. DOB [DOB withheld: age 90+].</div>
+
+    <h3>Dates: slide the whole calendar, don't delete it</h3>
+    <p>If every date were deleted, the medicine would stop making sense ("troponin rose on ___ and fell on ___").
+      Instead, HIPA picks one random amount of time per document and <strong>moves every date by that same amount</strong>,
+      like sliding a transparent calendar across the page. A 4-day stay is still 4 days. The amount is always whole
+      weeks, so "Monday" stays a Monday.</p>
+    <div class="example">Admitted 03/01/2024, discharged 03/05/2024
+→ Admitted 11/03/2023, discharged 11/07/2023   (still 4 days)</div>
+
+    <h2>4. Consistency: one person, one fake name</h2>
+    <p>A novel whose main character changes name every chapter would be impossible to follow. HIPA keeps a private
+      lookup table for each document so that <code>John Smith</code>, <code>Mr. Smith</code>, <code>J. Smith</code> and
+      <code>SMITH, JOHN</code> all become the <em>same</em> fake person. Family members keep a shared surname, and fake
+      first names keep the original sex, so "he/she" still matches.</p>
+
+    <h2>5. How identifiers are found: three layers of security</h2>
+    <div class="card">
+      <p><strong>Layer 1: the metal detector (patterns).</strong> Anything with a fixed shape: phone numbers, SSNs,
+        emails, dates in a dozen formats, ZIP codes, record numbers. Fast and very reliable.</p>
+      <p><strong>Layer 2: the trained officer (context).</strong> The words around something give it away. The word after
+        <code>Dr.</code>, <code>Patient:</code>, <code>his wife</code>, <code>lives in</code> or <code>MRN:</code> is
+        almost certainly an identifier.</p>
+      <p><strong>Layer 3: the sniffer dog (dictionaries).</strong> Lists of thousands of first names, surnames and cities
+        catch names that appear with no clue nearby. Once a name is found anywhere, every other mention of it is caught too.</p>
+    </div>
+    <p>There's also a <strong>medical allow-list</strong>, so that names that are part of medicine stay put:
+      <em>Parkinson's disease</em>, <em>Bell's palsy</em>, <em>Foley catheter</em>, <em>Babinski sign</em>,
+      <em>Stevens-Johnson syndrome</em>, <em>Wilson disease</em>. HIPA checks the word that follows, so
+      "Dr. Wilson" is replaced but "Wilson disease" is not.</p>
+
+    <h2>6. The colors: like spell-check for privacy</h2>
+    <p>Spell-check underlines problems, but you make the final decision. HIPA does the same:</p>
+    <ul>
+      <li><mark class="r high">Green</mark>: replaced, with strong evidence.</li>
+      <li><mark class="r medium">Yellow</mark>: replaced, but found without strong context. Glance at it.</li>
+      <li><mark class="hint">Orange</mark>: <em>not</em> replaced, but could identify someone in context (a famous job,
+        "the only case in the state", a holiday date, a newsworthy accident). You decide.</li>
+    </ul>
+    <p>Click any highlight to see the original or restore it. Select any plain text in the result to redact it.
+      Use <b>Always replace</b> for things like a pet's name or a small business, and <b>Never replace</b> for false alarms.</p>
+
+    <h2>7. Hidden identifiers to watch for</h2>
+    <p>Some details aren't on the list of 18 but can still give a person away when combined. These are called
+      <em>quasi-identifiers</em>, like a jigsaw puzzle where no single piece shows the picture but a few together do:</p>
+    <ul>
+      <li>Rare disease + small town ("the only FOP patient in Wyoming")</li>
+      <li>Distinctive jobs ("the town's mayor", "NFL quarterback")</li>
+      <li>Newsworthy events ("injured in the Main St bridge collapse")</li>
+      <li>Unusual details: tattoos with names, a pet's name, a family business</li>
+    </ul>
+
+    <h2 id="limits">8. Limitations (please read)</h2>
+    <div class="card">
+      <ul>
+        <li><strong>No automated tool can guarantee 100% de-identification.</strong> HIPA is a strong first pass.
+          A human still needs to read the result before sharing it.</li>
+        <li>It's designed for <strong>English, US-style</strong> clinical text. Names written all in lowercase, very unusual
+          names with no context, and non-US address formats are harder to catch.</li>
+        <li>It covers the <strong>Safe Harbor</strong> method. The other HIPAA method, <em>Expert Determination</em>,
+          requires a qualified statistician.</li>
+        <li>It handles text only. Images, scanned PDFs and photos must be handled separately.</li>
+        <li>Before putting patient-derived text into any cloud or AI service, follow your organization's rules.
+          Many institutions require approval from a privacy office or IRB even for de-identified data.</li>
+        <li>The <b>Replacement key</b> table links fakes back to real people. It is PHI. Never share or save it.</li>
+      </ul>
+    </div>
+
+    <h2>9. Tips for best results</h2>
+    <ul>
+      <li>Keep labels like <code>Patient:</code>, <code>DOB:</code>, <code>MRN:</code>. They help detection.</li>
+      <li>Read the yellow and orange items. They're where mistakes are most likely.</li>
+      <li>Use <b>Tags</b> mode when you want it obvious that data was removed, and <b>Realistic</b> mode when you
+        want natural-reading teaching cases.</li>
+      <li>Click <b>Generate new fakes</b> to get a different set of names and a different date shift.</li>
+    </ul>
+    <p><a href="index.html">← Back to the tool</a></p>
+  </main>
+</body>
+</html>

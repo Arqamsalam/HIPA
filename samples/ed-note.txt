@@ -1,0 +1,47 @@
+EMERGENCY DEPARTMENT NOTE
+
+Patient Name: John A. Smith            MRN: 00482913
+DOB: 03/14/1970                        Sex: Male
+Address: 123 Oak Street, Apt 4B, Dallas, TX 75201
+Phone: (214) 555-8812     Email: jsmith70@gmail.com
+SSN: 123-45-6789
+Insurance: Aetna PPO, Member ID: AET99812345
+Date of Service: 10/02/2024 14:32
+Attending: Dr. Amanda Lee
+Emergency Contact: Mary Smith (wife) 214-555-9034
+
+CHIEF COMPLAINT: Chest pain x 2 hours.
+
+HISTORY OF PRESENT ILLNESS:
+Mr. Smith is a 54-year-old male with a history of hypertension, type 2 diabetes mellitus,
+and hyperlipidemia who presents with substernal chest pressure that began at 12:15 while
+mowing his lawn. Pain is 7/10, radiates to the left arm, associated with diaphoresis and
+nausea. He took aspirin 325 mg at home. His wife Mary drove him in. He works at Lone Star
+Plumbing Supply. He was seen by Dr. Patel at Mercy General Hospital on 09/15/2024 for a
+stress test that was "borderline." Lives in Dallas with his wife.
+
+PAST MEDICAL HISTORY: HTN, T2DM (A1c 7.9% on 08/01/2024), HLD, GERD.
+MEDICATIONS: Metformin 1000 mg PO BID, Lisinopril 20 mg daily, Atorvastatin 40 mg nightly.
+ALLERGIES: Penicillin (rash).
+SOCIAL HISTORY: Former smoker, 20 pack-years, quit 2015. Occasional alcohol.
+FAMILY HISTORY: Father had MI at age 58.
+
+VITALS: BP 162/94, HR 102, RR 20, Temp 98.6 F, SpO2 95% on RA, Wt 98 kg.
+
+EXAM: Diaphoretic, anxious. RRR, no murmurs. Lungs clear bilaterally. No edema.
+
+LABS:
+  Troponin I     0.48 ng/mL (H)   [ref <0.04]
+  WBC            11.2 K/uL
+  Hgb            14.1 g/dL
+  Plt            245 K/uL
+  Na 138, K 4.1, Cl 101, CO2 23, BUN 18, Cr 1.1, Glucose 212
+  LDL 162 mg/dL
+
+ECG: Sinus tachycardia at 102, 2 mm ST elevation in II, III, aVF.
+
+ASSESSMENT/PLAN:
+54M with inferior STEMI. Cath lab activated. Aspirin 325 mg given, heparin bolus,
+ticagrelor 180 mg load. Cardiology (Dr. Patel) consulted. Admit to CCU.
+
+Electronically signed by: Amanda Lee, MD   10/02/2024 15:10
